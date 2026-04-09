@@ -1,4 +1,4 @@
-# synapse
+# Synapse
 
 Synapse is a Next.js 16 project with authentication scaffolding, Prisma, and PostgreSQL. It currently includes a login flow, Better Auth integration, and a small UI foundation built with Tailwind CSS and shadcn/ui components.
 
@@ -11,11 +11,12 @@ Synapse is a Next.js 16 project with authentication scaffolding, Prisma, and Pos
 - PostgreSQL
 - Tailwind CSS 4
 - shadcn/ui
+- Resend
 
 ## Development
 
 Install dependencies, add your environment variables, and start the dev server:
 
 ```bash
-npm install
-npm run dev
+pnpm install
+pnpm run dev
