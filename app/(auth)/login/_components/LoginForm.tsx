@@ -18,6 +18,7 @@ export default function LoginForm() {
   const router = useRouter();
 
   async function signInWithGithub () {
+    console.log("clicked github login button")
     startGithubTransition(async () => {
       await authClient.signIn.social({
       provider: 'github',
