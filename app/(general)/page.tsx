@@ -9,22 +9,6 @@ import { toast } from 'sonner';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
-
-export default function App() {
-  const router = useRouter();
-  const { data: session } = authClient.useSession();
-
-  async function signOut() {
-    await authClient.signOut({
-      fetchOptions: {
-        onSuccess: () => {
-          router.push('/');
-          toast.success("Signout successfully.")
-        },
-      },
-    });
-  }
-
 interface featureProps {
   title: string;
   description: string;
@@ -57,6 +41,24 @@ interface featureProps {
     }
   ]
 
+
+export default function App() {
+  const router = useRouter();
+  const { data: session } = authClient.useSession();
+
+  async function signOut() {
+    await authClient.signOut({
+      fetchOptions: {
+        onSuccess: () => {
+          router.push('/');
+          toast.success("Signout successfully.")
+        },
+      },
+    });
+  }
+
+
+
   return (
    <>
     <section className='relative py-20'>
@@ -83,19 +85,19 @@ interface featureProps {
         </div>
       </div>
     </section>
-    <section className='grid grid-cols-1 md:grid-cols-2 lg:grid-col-4 gap-6'>
+    <section className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6'>
         {features.map((feature,index) => (
-          <Card key={index} className="hover: shadow-lg transition-shadow">
+          <Card key={index} className="hover:shadow-lg transition-shadow p-4">
               <CardHeader>
-                <div className='text-4x mb:'>
+                <div className='text-4x mb-2'>
                   {feature.icon}
                 </div>
               </CardHeader>
-              <CardTitle>
+              <CardTitle className='ml-4'>
                 {feature.title}
               </CardTitle>
               <CardContent>
-                <p className='text-muted-foregroun'>{feature.description}</p>
+                <p className='text-muted-foreground'>{feature.description}</p>
               </CardContent>
           </Card>
         ))}
