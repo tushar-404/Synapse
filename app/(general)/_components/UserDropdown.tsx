@@ -22,7 +22,7 @@ interface iAppProps {
   image: string
 }
 
-export default function UserDropdown({name}: iAppProps) {
+export default function UserDropdown({name, image}: iAppProps) {
   const router = useRouter()
   async function signOut() {
     await authClient.signOut({
@@ -44,7 +44,7 @@ export default function UserDropdown({name}: iAppProps) {
     <DropdownMenuTrigger asChild>
       <Button className="relative h-10 w-10 rounded-full" variant="ghost">
         <Avatar>
-          <AvatarImage alt="@haydenbleasel" src="https://github.com/haydenbleasel.png" />
+          <AvatarImage alt="@haydenbleasel" src={image} />
           <AvatarFallback>{name[0].toUpperCase()}</AvatarFallback>
         </Avatar>
       </Button>
@@ -54,9 +54,9 @@ export default function UserDropdown({name}: iAppProps) {
         <span className="text-foreground truncate text-sm font-medium">
           {name}
         </span>
-        <span className="text-muted-foreground truncate text-xs font-normal">
+        <div className="text-muted-foreground truncate text-xs font-normal">
           tushar@gmail.com
-        </span>
+        </div>
         
       </DropdownMenuLabel>
       <DropdownMenuSeparator />
