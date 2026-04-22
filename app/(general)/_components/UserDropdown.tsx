@@ -12,9 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import Link from "next/link"
-import { authClient } from "@/lib/auth-client"
-import { useRouter } from "next/navigation"
-import { toast } from "sonner"
+import { useSignout } from "@/hooks/use-signout"
 
 interface iAppProps {
   name: string;
@@ -23,22 +21,7 @@ interface iAppProps {
 }
 
 export default function UserDropdown({name, image}: iAppProps) {
-  const router = useRouter()
-  async function signOut() {
-    await authClient.signOut({
-      fetchOptions: {
-        onSuccess: () => {
-          router.push('/');
-          toast.success("Signout successfully.")
-        },
-        onError: () => {
-          toast.error(
-            "Failed to signout"
-          )
-        }
-      },
-    });
-  }
+  const handleSignout = useSignout()
   return (
   <DropdownMenu>
     <DropdownMenuTrigger asChild>
@@ -57,7 +40,7 @@ export default function UserDropdown({name, image}: iAppProps) {
         <div className="text-muted-foreground truncate text-xs font-normal">
           tushar@gmail.com
         </div>
-        
+
       </DropdownMenuLabel>
       <DropdownMenuSeparator />
       <DropdownMenuItem asChild>
@@ -74,16 +57,16 @@ export default function UserDropdown({name, image}: iAppProps) {
       </DropdownMenuItem>
       <DropdownMenuItem asChild >
         <Link href="/dashboard">
-          <LayoutDashboardIcon 
-          size={16} 
-          className="opacity-60" 
-          aria-hidden="true" 
+          <LayoutDashboardIcon
+          size={16}
+          className="opacity-60"
+          aria-hidden="true"
           />
           <span>Dashboard</span>
         </Link>
       </DropdownMenuItem>
       <DropdownMenuSeparator />
-      <DropdownMenuItem variant="destructive" onClick={signOut}>
+      <DropdownMenuItem variant="destructive" onClick={handleSignout}>
         <LogOut />
         Log out
       </DropdownMenuItem>

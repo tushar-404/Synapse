@@ -20,12 +20,12 @@ export default function Navbar() {
       <div className="container flex min-h-6 items-center mx-auto px-4 md:px-6 lg:px-8">
         <Link href="/" className="flex items-center space-x-2 mr-4">
         <Image src={logo} alt="Logo" className="size-9"/>
-        <span className="font-bold ml-2">Synapse</span>
+        <span className="font-bold mb-1">Synapse</span>
         </Link>
         <nav className="hidden md:flex md:flex-1 md:items-center md:justify-between">
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-4 ml-3">
             {navigationItems.map((item) => (
-              <Link key={item.name} href={item.href} className="text-sm font-medium transition-colors hover:text-primary"> 
+              <Link key={item.name} href={item.href} className="text-sm font-medium transition-colors hover:text-primary">
                 {item.name}
               </Link>
 
@@ -38,11 +38,11 @@ export default function Navbar() {
 
             ) : (
               <>
-                <Link 
-                href="/login" 
+                <Link
+                href="/login"
                 className={buttonVariants({
                   variant: 'secondary'
-                })}> 
+                })}>
                   Login
                 </Link>
                 <Link href="/login" className={buttonVariants()}>
