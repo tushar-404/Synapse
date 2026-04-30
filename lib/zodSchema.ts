@@ -4,6 +4,11 @@ export const courseLevels = [
     "Beginner", "Intermediate", "Advanced"
 ]
 
+export const courseCategories = [
+    "Development", "Business", "Finance", "IT and Software", "Office productivity",
+    "Personal Development", "Design", "Marketing", "Health", "Music", "Teaching and Academics "
+] as const
+
 export const courseStatus = [
     "Draft", "Publish", "Archieved"
 ]
@@ -19,7 +24,9 @@ export const courseSchema = z.object({
     duration: z.coerce.number().min(1, {"message" : "Duartion must be of min 1 hour"}).max(500, {"message": "Duration must not exceed  by 500 hour"}),
 
     level: z.enum(courseLevels, {"message" : "Level is required"}),
-    category: z.string(),
+    category: z.enum(courseCategories, {
+        message: "Category is required"
+    }),
     smallDescription: z.string().min(3, {"message": "Must contain min 3 characters"}).max(200, {"message": "Must not exceed by 200 characters"}),
 
     slug: z.string().min(3, {"message": "Must be at least 3 character long"}),
@@ -30,3 +37,5 @@ export const courseSchema = z.object({
 })
 
 export type CourseSchemaType = z.infer<typeof courseSchema>
+
+
