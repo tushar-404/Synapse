@@ -116,7 +116,6 @@ export default function CourseCreation() {
                   <FormLabel>Thumbnail Image</FormLabel>
                   <FormControl>
                     <Uploader />
-                    {/* <Input placeholder="thumbnail URL" {...field }/> */}
                   </FormControl>
                 </FormItem>
   )}/>
