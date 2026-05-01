@@ -5,9 +5,7 @@ import {FileRejection, useDropzone} from "react-dropzone"
 import { Card, CardContent } from "../ui/card"
 import { cn } from "@/lib/utils"
 import { RenderEmptyState } from "./RenderState"
-import { RenderErrorState } from "./RenderState"
 import { toast } from "sonner"
-import { v4 as uuidv4 } from "uuid";
 
 
 interface UploaderState {
@@ -33,7 +31,7 @@ export function Uploader() {
         fileType: "image"
     })
 
-    function uploadFile(file: File) {
+    async function uploadFile(file: File) {
         setFileState((prev) => ({
             ...prev,
             uploading: true,
@@ -41,7 +39,52 @@ export function Uploader() {
         }))
 
         try {
-            
+            const preSignedResponse = await fetch("/api/s3/upload", {
+                method: "POST",
+                headers: {
+                    "Content-Type" : "application/json"
+                },
+                body: JSON.stringify({
+                    fileName: file.name,
+                    contentType: file.type,
+                    size: file.size,
+                    isImage: true,
+                })
+            })
+            if(!preSignedResponse.ok) {
+                toast.error("Failed to get presigned URL")
+                setFileState((prev) => ({
+                    ...prev,
+                    uploading: false,
+                    progress: 0,
+                    error: true
+                }))
+                return
+            }
+            const { preSignedUrl, key } = await preSignedResponse.json()
+
+            await new Promise((resolve, reject) => {
+                const xhr = new XMLHttpRequest()
+                xhr.upload.onprogress = (event)=> {
+                    if(event.lengthComputable) {
+                        const percentageComputed = (event.loaded / event.total) * 100
+                        setFileState((prev) => ({
+                        ...prev,
+                        progress: Math.round(percentageComputed)
+                    }))
+                    }
+                    xhr.onload = ()=> {
+                        if(xhr.status === 200 || xhr.status === 204) {
+                            setFileState ((prev) => ({
+                                ...prev,
+                                progress: 100,
+                                uploading: false,
+                                key: key,
+                            }))
+                        }
+                    }
+                }
+            })
         }
         catch {
 

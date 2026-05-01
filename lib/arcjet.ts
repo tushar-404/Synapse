@@ -1,14 +1,16 @@
+import "server-only"
+
 import arcjet, {
   detectBot, fixedWindow, protectSignup, sensitiveInfo, shield, slidingWindow
 } from "@arcjet/next"
 import { env } from "./env"
 
 export {
-   detectBot, 
-   fixedWindow, 
-   protectSignup, 
-   sensitiveInfo, 
-   shield, 
+   detectBot,
+   fixedWindow,
+   protectSignup,
+   sensitiveInfo,
+   shield,
    slidingWindow
 }
 
