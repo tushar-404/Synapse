@@ -1,5 +1,4 @@
 "use client"
-import Tiptap from "@/components/rich-text-editor/tiptap"
 import { buttonVariants, Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -12,6 +11,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import RichEditor from "@/components/rich-text-editor/Editor";
 
 export default function CourseCreation() {
   const form = useForm<CourseSchemaType>({
@@ -102,10 +102,11 @@ export default function CourseCreation() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Description</FormLabel>
-                  <Tiptap />
-                  {/* <FormControl>
-                    <Textarea className="min-h-[180]" placeholder="Description" {...field }/>
-                  </FormControl> */}
+                  <FormControl>
+                    <RichEditor field={field}/>
+
+                    {/* <Textarea className="min-h-[180]" placeholder="Description" {...field }/> */}
+                  </FormControl>
                 </FormItem>
   )}/>
           <FormField

@@ -32,7 +32,7 @@ export default function UserDropdown({name, image}: iAppProps) {
         </Avatar>
       </Button>
     </DropdownMenuTrigger>
-    <DropdownMenuContent align="end" className="w-56">
+    <DropdownMenuContent align="end" className="min-w-48">
       <DropdownMenuLabel className="font-normal">
         <span className="text-foreground truncate text-sm font-medium">
           {name}
