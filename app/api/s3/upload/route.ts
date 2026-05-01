@@ -34,7 +34,7 @@ export async function POST(request: Request) {
             Bucket: env.NEXT_PUBLIC_S3_BUCKET_NAME_IMAGES,
             ContentType:contentType,
             ContentLength: size,
-            Key:uniqueKey
+            Key:uniqueKey,
         })
 
         const preSignedUrl = await getSignedUrl(S3, command, {

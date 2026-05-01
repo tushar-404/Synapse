@@ -1,155 +1,191 @@
 "use client"
 
 import { useCallback, useState } from "react"
-import {FileRejection, useDropzone} from "react-dropzone"
+import { FileRejection, useDropzone } from "react-dropzone"
 import { Card, CardContent } from "../ui/card"
 import { cn } from "@/lib/utils"
-import { RenderEmptyState } from "./RenderState"
+import { RenderEmptyState, RenderErrorState, RenderUploadedState, RenderUploadingState } from "./RenderState"
 import { toast } from "sonner"
-
+import { v4 as uuidv4 } from "uuid"
 
 interface UploaderState {
-    id: string | null;
-    file: File | null;
-    uploading : boolean;
-    progress: number;
-    key?: string;
-    isDeleting: boolean;
-    error: boolean;
-    objectUrl?: string;
-    fileType: "image" | "video";
+  id: string | null
+  file: File | null
+  uploading: boolean
+  progress: number
+  key?: string
+  isDeleting: boolean
+  error: boolean
+  objectUrl?: string
+  fileType: "image" | "video"
 }
 
 export function Uploader() {
-    const [fileState, setFileState] = useState<UploaderState>({
-        error: false,
-        file: null,
-        id: null,
+  const [fileState, setFileState] = useState<UploaderState>({
+    error: false,
+    file: null,
+    id: null,
+    uploading: false,
+    progress: 0,
+    isDeleting: false,
+    fileType: "image",
+  })
+
+  async function uploadFile(file: File) {
+    setFileState((prev) => ({
+      ...prev,
+      uploading: true,
+      progress: 0,
+      error: false,
+    }))
+
+    try {
+      const preSignedResponse = await fetch("/api/s3/upload", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          fileName: file.name,
+          contentType: file.type,
+          size: file.size,
+          isImage: file.type.startsWith("image"),
+        }),
+      })
+
+      if (!preSignedResponse.ok) {
+        throw new Error("Failed to get presigned URL")
+      }
+
+      const { preSignedUrl, key } = await preSignedResponse.json()
+
+      await new Promise<void>((resolve, reject) => {
+        const xhr = new XMLHttpRequest()
+
+        xhr.open("PUT", preSignedUrl)
+        xhr.setRequestHeader("Content-Type", file.type)
+
+        xhr.upload.onprogress = (event) => {
+          if (event.lengthComputable) {
+            const percentage = (event.loaded / event.total) * 100
+            setFileState((prev) => ({
+              ...prev,
+              progress: Math.round(percentage),
+            }))
+          }
+        }
+
+        xhr.onload = () => {
+          if (xhr.status === 200 || xhr.status === 204) {
+            setFileState((prev) => ({
+              ...prev,
+              progress: 100,
+              uploading: false,
+              key,
+            }))
+            toast.success("File uploaded successfully")
+            resolve()
+          } else {
+            reject(new Error("Upload failed..."))
+          }
+        }
+
+        xhr.onerror = () => reject(new Error("Network error"))
+
+        xhr.open("PUT", preSignedUrl)
+        xhr.setRequestHeader("Content-Type", file.type)
+        xhr.send(file)
+      })
+    } catch (err) {
+      console.error(err)
+      toast.error("Something went error")
+
+      setFileState((prev) => ({
+        ...prev,
+        progress: 0,
+        uploading: false,
+        error: true,
+      }))
+    }
+  }
+
+  const onDrop = useCallback((acceptedFiles: File[]) => {
+    if (acceptedFiles.length > 0) {
+      const file = acceptedFiles[0]
+
+      setFileState({
+        file,
         uploading: false,
         progress: 0,
+        objectUrl: URL.createObjectURL(file),
+        error: false,
+        id: uuidv4(),
         isDeleting: false,
-        fileType: "image"
-    })
+        fileType: file.type.startsWith("image") ? "image" : "video",
+      })
 
-    async function uploadFile(file: File) {
-        setFileState((prev) => ({
-            ...prev,
-            uploading: true,
-            progress: 0
-        }))
-
-        try {
-            const preSignedResponse = await fetch("/api/s3/upload", {
-                method: "POST",
-                headers: {
-                    "Content-Type" : "application/json"
-                },
-                body: JSON.stringify({
-                    fileName: file.name,
-                    contentType: file.type,
-                    size: file.size,
-                    isImage: true,
-                })
-            })
-            if(!preSignedResponse.ok) {
-                toast.error("Failed to get presigned URL")
-                setFileState((prev) => ({
-                    ...prev,
-                    uploading: false,
-                    progress: 0,
-                    error: true
-                }))
-                return
-            }
-            const { preSignedUrl, key } = await preSignedResponse.json()
-
-            await new Promise((resolve, reject) => {
-                const xhr = new XMLHttpRequest()
-                xhr.upload.onprogress = (event)=> {
-                    if(event.lengthComputable) {
-                        const percentageComputed = (event.loaded / event.total) * 100
-                        setFileState((prev) => ({
-                        ...prev,
-                        progress: Math.round(percentageComputed)
-                    }))
-                    }
-                    xhr.onload = ()=> {
-                        if(xhr.status === 200 || xhr.status === 204) {
-                            setFileState ((prev) => ({
-                                ...prev,
-                                progress: 100,
-                                uploading: false,
-                                key: key,
-                            }))
-                        }
-                    }
-                }
-            })
-        }
-        catch {
-
-        }
+      uploadFile(file)
     }
+  }, [])
 
+  function rejectedFiles(fileRejection: FileRejection[]) {
+    if (fileRejection.length) {
+      const tooManyFiles = fileRejection.find(
+        (rejection) => rejection.errors[0].code === "too-many-files"
+      )
 
-    const onDrop = useCallback((acceptedFiles: File[]) => {
-        console.log(acceptedFiles)
-        if(acceptedFiles.length > 0) {
-            const file = acceptedFiles[0];
-
-            setFileState({
-                file: file,
-                uploading: false,
-                progress: 0,
-                objectUrl: URL.createObjectURL(file),
-                error: false,
-                id: uuidv4(),
-                isDeleting: false,
-                fileType: "image"
-            })
-        }
-    }, [])
-
-    function rejectedFiles(fileRejection : FileRejection[]) {
-        if(fileRejection.length) {
-            const tooManyFiles = fileRejection.find((rejection) =>
-                rejection.errors[0].code === 'too-many-files'
-            );
-             const filesIsTooBig = fileRejection.find(
+      const fileTooBig = fileRejection.find(
         (rejection) => rejection.errors[0].code === "file-too-large"
-    )
+      )
 
-            if(filesIsTooBig) {
-                toast.error("File size exceeds the limit")
-            }
-            if(tooManyFiles) {
-                toast.error("Too many files are selected, max is 1")
-            }
+      if (fileTooBig) {
+        toast.error("File size exceeds the limit (5MB)")
+      }
 
-        }
+      if (tooManyFiles) {
+        toast.error("Too many files selected (max: 1)")
+      }
     }
+  }
 
+  function renderContent(){
+    if(fileState.uploading) {
+        return <h1><RenderUploadingState file={fileState.file as File} progress={fileState.progress}/></h1>
+    }
+    if(fileState.error) {
+        return <RenderErrorState />
+    }
+    if(fileState.objectUrl) {
+        return (
+            <RenderUploadedState previewUrl={fileState.objectUrl} />
+        )
+    }
+    return <RenderEmptyState isDragActive={isDragActive}/>
+  }
 
-    const { getRootProps, getInputProps, isDragActive} = useDropzone({onDrop,
-        accept:{"image/*": []},
-        maxFiles:1,
-        multiple: false,
-        maxSize: 5*1024*1024, // 5mb
-        onDropRejected: rejectedFiles
-    })
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop,
+    accept: { "image/*": [] },
+    maxFiles: 1,
+    multiple: false,
+    maxSize: 5 * 1024 * 1024,
+    onDropRejected: rejectedFiles,
+  })
 
-    return (
-        <Card {...getRootProps()} className={cn(
-            "relative border-2 border-dashed transition color duration-200 ease-in-out w-full h-64",
-            isDragActive ? "border-primary bg-primary/10 border-solid" :
-            'border-border hover:border-primary'
-        )}>
-            <CardContent className="flex items-center justify-center h-full w-full p-4">
-                <input {...getInputProps()} />
-                <RenderEmptyState isDragActive={isDragActive}/>
-
-                 {/* <RenderErrorState /> */}
-            </CardContent>
-        </Card>
-    )
+  return (
+    <Card
+      {...getRootProps()}
+      className={cn(
+        "relative border-2 border-dashed transition duration-200 ease-in-out w-full h-64",
+        isDragActive
+          ? "border-primary bg-primary/10 border-solid"
+          : "border-border hover:border-primary"
+      )}
+    >
+      <CardContent className="flex items-center justify-center h-full w-full p-4">
+        <input {...getInputProps()} />
+        {renderContent()}
+      </CardContent>
+    </Card>
+  )
 }
