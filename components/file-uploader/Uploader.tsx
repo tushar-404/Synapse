@@ -7,7 +7,6 @@ import { cn } from "@/lib/utils"
 import { RenderEmptyState, RenderErrorState, RenderUploadedState, RenderUploadingState } from "./RenderState"
 import { toast } from "sonner"
 import { v4 as uuidv4 } from "uuid"
-import { blob } from "stream/consumers"
 
 interface UploaderState {
   id: string | null
@@ -21,9 +20,12 @@ interface UploaderState {
   fileType: "image" | "video"
 }
 
+interface iAppProps {
+    value?:string,
+    onChange?: (value: string) => void
+}
 
-
-export function Uploader() {
+export function Uploader({onChange, value} : iAppProps) {
   const [fileState, setFileState] = useState<UploaderState>({
     error: false,
     file: null,
@@ -32,6 +34,7 @@ export function Uploader() {
     progress: 0,
     isDeleting: false,
     fileType: "image",
+    key: value,
   })
 
   async function uploadFile(file: File) {
@@ -84,8 +87,11 @@ export function Uploader() {
               ...prev,
               progress: 100,
               uploading: false,
-              key,
+              key: key,
             }))
+
+            onChange?.(key);
+
             toast.success("File uploaded successfully")
             resolve()
           } else {
@@ -162,7 +168,10 @@ export function Uploader() {
         if(fileState.objectUrl && !fileState.objectUrl.startsWith("http")) {
             URL.revokeObjectURL(fileState.objectUrl)
         }
-        setFileState((prev) => ({
+
+        onChange?.("")
+
+        setFileState(() => ({
             file: null,
             uploading: false,
             progress: 0,
