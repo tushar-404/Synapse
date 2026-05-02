@@ -11,8 +11,10 @@ export const courseCategories = [
 ] as const
 
 export const courseStatus = [
-    "Draft", "Publish", "Archieved"
-]
+  "Draft",
+  "Publishes",
+  "Acrhieved"
+] as const
 
 export const courseSchema = z.object({
     title: z.string().max(100, {"message": "Title must not exceed by 100 characters"}).min(3, {"message" : "Title must contain min 3 characters"}),
