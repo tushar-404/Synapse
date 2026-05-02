@@ -49,7 +49,7 @@ export default function CourseCreation() {
       if(result.status === 'success') {
         toast.success(result.message)
         form.reset()
-        router.push("admin/courses")
+        router.push("/app/admin/courses")
       }
       else if(result.status === "error"){
         toast.error(result.message)
