@@ -29,6 +29,11 @@ model User {
   accounts      Account[]
   courses       Course[]
 
+  role       String?
+  banned     Boolean?  @default(false)
+  banReason  String?
+  banExpires DateTime?
+
   @@unique([email])
   @@map("user")
 }
@@ -43,6 +48,8 @@ model Session {
   userAgent String?
   userId    String
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  impersonatedBy String?
 
   @@unique([token])
   @@index([userId])
@@ -81,39 +88,33 @@ model Verification {
   @@map("verification")
 }
 
-
 model Course {
-  id                String       @id      @default(uuid())
-  title             String
-  description       String
-  fileKey           String
-  price             Int
-  duration          Int
-  level             CourseLevel  @default(Beginner)
+  id          String      @id @default(uuid())
+  title       String
+  description String
+  fileKey     String
+  price       Int
+  duration    Int
+  level       CourseLevel @default(Beginner)
 
-  category          String
-  smallDescription  String
-  slug              String       @unique
+  category         String
+  smallDescription String
+  slug             String @unique
 
+  status CourseStatus @default(Draft)
 
-  status            CourseStatus @default(Draft)
+  createdAt DateTime @default(now())
+  updateAt  DateTime @updatedAt
 
-  createdAt         DateTime     @default(now())
-  updateAt          DateTime     @updatedAt
-
-  user              User        @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId            String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
 }
-
-
-
 
 enum CourseStatus {
   Draft
   Publishes
   Acrhieved
 }
-
 
 enum CourseLevel {
   Beginner
