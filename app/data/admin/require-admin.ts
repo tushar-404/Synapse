@@ -12,7 +12,7 @@ export async function requireAdmin() {
     }
 
     if(session.user.role !== "admin"){
-        return redirect("/not admin");
+        return redirect("/not-admin");
     }
     return session;
 }
