@@ -27,7 +27,7 @@ interface iAppProps {
 }
 
 export function Uploader({onChange, value} : iAppProps) {
-  const fileUrl = useConstructUrl(value || "")
+  const fileUrl = useConstructUrl(value || '')
   const [fileState, setFileState] = useState<UploaderState>({
     error: false,
     file: null,
@@ -37,7 +37,7 @@ export function Uploader({onChange, value} : iAppProps) {
     isDeleting: false,
     fileType: "image",
     key: value,
-    objectUrl: fileUrl
+    objectUrl: value ? fileUrl : undefined
   })
 
   async function uploadFile(file: File) {
@@ -163,7 +163,7 @@ export function Uploader({onChange, value} : iAppProps) {
 
             setFileState((prev) => ({
                 ...prev,
-                iseDeleting: true,
+                isDeleting: true,
                 error:true
             }))
             return;
