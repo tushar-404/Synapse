@@ -39,7 +39,6 @@ export default function CourseCreation() {
   });
 
   function onSubmit(value: CourseSchemaType){
-    console.log(value)
     startTransition(async () => {
       const {data: result, error} = await tryCatch(CreateCourse(value))
       if(error){
@@ -53,6 +52,7 @@ export default function CourseCreation() {
       }
       else if(result.status === "error"){
         toast.error(result.message)
+        form.reset()
       }
     })
   }
