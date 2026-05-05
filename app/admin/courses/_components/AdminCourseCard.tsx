@@ -15,9 +15,6 @@ interface iAppProps{
 
 export function AdminCourseCard({data} : iAppProps){
     const thumbnailUrl = useConstructUrl(data.fileKey)
-     console.log("ENV:", process.env.NEXT_PUBLIC_S3_BUCKET_NAME_IMAGES)
-    console.log("FILE KEY:", data.fileKey)
-    console.log("THUMB URL:", thumbnailUrl)
     return(
         <Card className="group relative py-0 gap-0">
             <div className="absolute top-2 z-10 right-2">
