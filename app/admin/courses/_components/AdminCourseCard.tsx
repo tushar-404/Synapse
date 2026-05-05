@@ -15,13 +15,17 @@ interface iAppProps{
 
 export function AdminCourseCard({data} : iAppProps){
     const thumbnailUrl = useConstructUrl(data.fileKey)
+     console.log("ENV:", process.env.NEXT_PUBLIC_S3_BUCKET_NAME_IMAGES)
+    console.log("FILE KEY:", data.fileKey)
+    console.log("THUMB URL:", thumbnailUrl)
     return(
         <Card className="group relative py-0 gap-0">
             <div className="absolute top-2 z-10 right-2">
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                        <Button variant={"secondary"} size="icon"></Button>
+                        <Button variant={"secondary"} size="icon">
                             <MoreVertical className="size-4"/>
+                        </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end" className="w-48">
                         <DropdownMenuItem asChild>
@@ -47,9 +51,9 @@ export function AdminCourseCard({data} : iAppProps){
                 </DropdownMenu>
             </div>
             <Image src={thumbnailUrl} alt="Thumbnail Url" width={600} height={400}
-            className="w-full rounded-t-lg aspect-video h-full object-cover"/>
+            className="w-full rounded-t-lg aspect-video object-cover"/>
             <CardContent className="p-4">
-                <Link href={`/admin/courses/${data.id}`} className="font-medium text-lg line-clamp-2 hover:underline group-hover:text-peimary transition-colors">
+                <Link href={`/admin/courses/${data.id}`} className="font-medium text-lg line-clamp-2 hover:underline group-hover:text-primary transition-colors">
                     {data.title}
                 </Link>
                 <p className="line-clamp-2 text-sm text-muted-foreground leading-tight mt-2">{data.smallDescription}</p>
