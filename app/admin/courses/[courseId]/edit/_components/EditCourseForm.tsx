@@ -27,7 +27,7 @@ interface iAppProps {
 export function EditCourseForm({data}: iAppProps){
     const [pending, startTransition] = useTransition();
     const router = useRouter()
-     const form = useForm<CourseSchemaType>({
+    const form = useForm<CourseSchemaType>({
         resolver: zodResolver(courseSchema) as Resolver<CourseSchemaType>,
         defaultValues: {
           title: data.title,

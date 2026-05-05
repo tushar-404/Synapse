@@ -28,6 +28,17 @@ export default async function EditRoute({params}: {params: Params}){
                         </CardContent>
                     </Card>
                 </TabsContent>
+                <TabsContent value="course-structure">
+                    <Card>
+                        <CardHeader>
+                            <CardTitle>Course Structure</CardTitle>
+                            <CardDescription>Here you can update your Course Structure</CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                            <EditCourseForm data={data}/>
+                        </CardContent>
+                    </Card>
+                </TabsContent>
             </Tabs>
         </div>
     )
