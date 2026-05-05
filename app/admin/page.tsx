@@ -3,7 +3,7 @@ import { SectionCards } from "@/components/section-cards";
 import data from "./data.json"
 import { DataTable } from "@/components/data-table";
 
-export default function AdminPage(){
+export default async function AdminPage(){
     return(
         <>
           <SectionCards />

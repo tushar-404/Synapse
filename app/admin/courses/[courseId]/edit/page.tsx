@@ -2,6 +2,7 @@ import { adminGetCourse } from "@/app/data/admin/admin-get-course"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { EditCourseForm } from "./_components/EditCourseForm"
+import { CourseStructure } from "./_components/CourseStructure"
 
 type Params = Promise<{courseId : string}>
 
@@ -13,7 +14,7 @@ export default async function EditRoute({params}: {params: Params}){
         <div className="text-3xl font-bold mb-8">
             <h1>Edit Course: <span className="text-primary underline">{data.title}</span></h1>
             <Tabs defaultValue="basic-info w-full">
-                <TabsList className="grid grid-cols-2 w-full">
+                <TabsList className="grid grid-cols-2 w-full mt-4">
                     <TabsTrigger value="basic-info">Basic info</TabsTrigger>
                     <TabsTrigger value="course-structure">Course Structure</TabsTrigger>
                 </TabsList>
@@ -35,7 +36,7 @@ export default async function EditRoute({params}: {params: Params}){
                             <CardDescription>Here you can update your Course Structure</CardDescription>
                         </CardHeader>
                         <CardContent>
-                            <EditCourseForm data={data}/>
+                            <CourseStructure data={data} />
                         </CardContent>
                     </Card>
                 </TabsContent>

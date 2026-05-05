@@ -38,6 +38,7 @@ model User {
   @@map("user")
 }
 
+
 model Session {
   id        String   @id
   expiresAt DateTime
@@ -108,6 +109,8 @@ model Course {
 
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String
+
+  chapter  Chapter[]
 }
 
 enum CourseStatus {
@@ -130,6 +133,11 @@ model Chapter {
 
   createdAt  DateTime    @default(now())
   updatedAt  DateTime    @updatedAt
+
+  Course    Course       @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  courseId  String
+
+  lessons   Lesson[]
 }
 
 model Lesson {
@@ -139,7 +147,12 @@ model Lesson {
   Description  String?
   thumbnailKey String?
   videoKey     String?
+  position     Int
 
   createdAt    DateTime    @default(now())
   updatedAt    DateTime    @updatedAt
+
+  Chapter      Chapter     @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+
+  chapterId    String
 }
