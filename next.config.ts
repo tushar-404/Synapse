@@ -4,7 +4,7 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       {
-        hostname: "synapse-lms.fly.storage.tigris.dev",
+        hostname: "synapse-lms.t3.tigrisfiles.io",
         port: "",
         protocol: "https"
       }

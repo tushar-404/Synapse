@@ -73,6 +73,7 @@ export function Uploader({onChange, value} : iAppProps) {
 
         xhr.open("PUT", preSignedUrl)
         xhr.setRequestHeader("Content-Type", file.type)
+        xhr.setRequestHeader("x-amz-acl", "public-read")
 
         xhr.upload.onprogress = (event) => {
           if (event.lengthComputable) {
@@ -103,9 +104,6 @@ export function Uploader({onChange, value} : iAppProps) {
         }
 
         xhr.onerror = () => reject(new Error("Network error"))
-
-        xhr.open("PUT", preSignedUrl)
-        xhr.setRequestHeader("Content-Type", file.type)
         xhr.send(file)
       })
     } catch (err) {

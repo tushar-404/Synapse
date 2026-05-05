@@ -59,10 +59,12 @@ export async function POST(request: Request) {
             ContentType:contentType,
             ContentLength: size,
             Key:uniqueKey,
+            ACL: "public-read",
         })
 
         const preSignedUrl = await getSignedUrl(S3, command, {
-            expiresIn: 360, //expires in 6 minutes
+            expiresIn: 360,
+            signableHeaders: new Set(["x-amz-acl"]),
         })
 
         const response = {

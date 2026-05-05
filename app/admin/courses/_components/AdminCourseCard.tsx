@@ -47,7 +47,7 @@ export function AdminCourseCard({data} : iAppProps){
                     </DropdownMenuContent>
                 </DropdownMenu>
             </div>
-            <Image src={thumbnailUrl} alt="Thumbnail Url" width={600} height={400}
+            <Image src={thumbnailUrl} alt="Thumbnail Image" width={600} height={400}
             className="w-full rounded-t-lg aspect-video object-cover"/>
             <CardContent className="p-4">
                 <Link href={`/admin/courses/${data.id}`} className="font-medium text-lg line-clamp-2 hover:underline group-hover:text-primary transition-colors">
