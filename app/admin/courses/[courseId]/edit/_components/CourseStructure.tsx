@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { cn } from "@/lib/utils";
-import { DndContext, DraggableSyntheticListeners, KeyboardSensor, PointerSensor, rectIntersection, useSensor, useSensors } from "@dnd-kit/core";
+import { DndContext, DragEndEvent, DraggableSyntheticListeners, KeyboardSensor, PointerSensor, rectIntersection, useSensor, useSensors } from "@dnd-kit/core";
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, useSortable, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { ChevronDown, ChevronRight, FileText, GripVertical, GripVerticalIcon, Trash2 } from "lucide-react";
@@ -46,13 +46,15 @@ export function CourseStructure({data} : iAppProps) {
     }
 
 
-    function handleDragEnd(event) {
+    function handleDragEnd(event: DragEndEvent) {
         const {active, over} = event
+
+        if(!over) return
 
         if(active.id !== over.id) {
             setItems((items) => {
-                const oldIndex = items.indexOf(active.id)
-                const newIndex = items.indexOf(over.id)
+                const oldIndex = items.findIndex(i => i.id === active.id)
+                const newIndex = items.findIndex(i => i.id === over.id)
 
                 return arrayMove(items, oldIndex, newIndex)
             })
@@ -98,7 +100,7 @@ export function CourseStructure({data} : iAppProps) {
                     <CardDescription></CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <SortableContext strategy={verticalListSortingStrategy} items={items}>
+                    <SortableContext strategy={verticalListSortingStrategy} items={items.map(i => i.id)}>
                         {items.map((item) => (
                             <SortableItem id={item.id} 
                             data={{type: "chapter"}} 
