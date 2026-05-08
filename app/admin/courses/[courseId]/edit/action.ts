@@ -65,8 +65,15 @@ export async function editCourse(data : CourseSchemaType, courseId: string) : Pr
                 userId: user.user.id,
             },
             data: {
-                ...parsedData,
+                title: parsedData.title,
+                description: parsedData.description,
+                fileKey: parsedData.fileKey,
+                price: parsedData.price,
+                duration: parsedData.duration,
                 level: parsedData.level as CourseLevel,
+                category: parsedData.category,
+                smallDescription: parsedData.smallDescription,
+                slug: parsedData.slug,
                 status: parsedData.courseStatus as CourseStatus,
             },
         })
