@@ -17,7 +17,7 @@ const aj = arcjet.withRule(
     fixedWindow({
         mode: "LIVE",
         window: "1m",
-        max: 5
+        max: 10
     })
 )
 
@@ -75,7 +75,8 @@ export async function editCourse(data : CourseSchemaType, courseId: string) : Pr
             message: "Course updated successfully"
         }
     }
-    catch {
+    catch(error) {
+        console.log(error)
         return {
             status: "error",
             message: "Failed to update Course"
