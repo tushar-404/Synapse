@@ -144,7 +144,7 @@ model Lesson {
   id           String      @id      @default(uuid())
 
   title        String
-  Description  String?
+  description  String?
   thumbnailKey String?
   videoKey     String?
   position     Int
