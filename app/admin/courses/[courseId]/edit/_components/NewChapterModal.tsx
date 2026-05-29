@@ -64,7 +64,7 @@ export function NewChapterModal({courseId}: {courseId: string}) {
             New Chapter
           </Button>
         </DialogTrigger>
-        <DialogContent className="sm:max-w-[106]">
+        <DialogContent className="sm:max-w-lg">
           <DialogHeader>
             <DialogTitle>Create New Chapter</DialogTitle>
             <DialogDescription>

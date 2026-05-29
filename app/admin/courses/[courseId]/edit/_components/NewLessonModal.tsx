@@ -64,7 +64,7 @@ export function NewLessonModal({courseId, chapterId}: { courseId: string, chapte
             New Lesson
           </Button>
         </DialogTrigger>
-        <DialogContent className="sm:max-w-[106]">
+        <DialogContent className="sm:max-w-lg">
           <DialogHeader>
             <DialogTitle>Create New Lesson</DialogTitle>
             <DialogDescription>
