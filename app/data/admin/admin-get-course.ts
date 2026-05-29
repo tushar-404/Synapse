@@ -30,7 +30,7 @@ export async function adminGetCourse(id: string): Promise<CourseWithStructure> {
             select: {
               id: true,
               title: true,
-              Description: true,
+              description: true,
               thumbnailKey: true,
               position: true,
               videoKey: true,
