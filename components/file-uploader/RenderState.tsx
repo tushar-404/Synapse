@@ -37,7 +37,7 @@ export function RenderUploadedState({
     previewUrl, isDeleting, handleRemoveFile, fileType
 }: {previewUrl : string, isDeleting: boolean; handleRemoveFile: () => void; fileType: "image" | "video"}) {
     return (
-        <div>
+        <div className="relative group w-full h-full flex items-center justify-center">
            {fileType === "video" ? (
                 <video src={previewUrl} controls className="rounded-md relative group w-full h-full"/>
             ) : (
