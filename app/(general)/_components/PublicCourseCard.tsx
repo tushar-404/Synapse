@@ -32,7 +32,7 @@ export function PublicCourseCard({data}: iAppProps) {
             <p className="text-sm text-muted-foreground">{data.category}h</p>
           </div>
         </div>
-        <Link href={`/app/admin/courses/${data.slug}`} className={buttonVariants({
+        <Link href={`/app/(admin)/courses/${data.slug}`} className={buttonVariants({
           className: "w-full mt-4"
         })}>
           Learn More.

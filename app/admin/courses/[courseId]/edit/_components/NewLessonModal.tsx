@@ -34,6 +34,7 @@ export function NewLessonModal({courseId, chapterId}: { courseId: string, chapte
   async function onSubmit(values: LessonSchemaType) {
     startTransition(async () => {
       const { data: result, error } = await tryCatch(createLesson(values))
+      console.log(result)
 
       if (error) {
         toast.error("An unexpected error occurred. Please try again")
