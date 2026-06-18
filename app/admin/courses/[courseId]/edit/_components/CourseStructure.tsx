@@ -294,7 +294,7 @@ export function CourseStructure({ data }: iAppProps) {
       <Card>
         <CardHeader className="flex flex-row items-center justify-between border-b border-border">
           <CardTitle>Chapters</CardTitle>
-          <NewChapterModal courseId='data.id'/>
+          <NewChapterModal courseId={data.id}/>
           <CardDescription></CardDescription>
         </CardHeader>
         <CardContent className="space-y-8 p-4">
@@ -377,7 +377,7 @@ export function CourseStructure({ data }: iAppProps) {
                           ))}
                         </SortableContext>
                         <div className="p-2">
-                          <NewLessonModal chapterId='item.id' courseId='data.id'/>
+                          <NewLessonModal chapterId={item.id} courseId={data.id}/>
                         </div>
                       </div>
                     </CollapsibleContent>

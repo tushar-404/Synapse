@@ -18,7 +18,7 @@ export function PublicCourseCard({data}: iAppProps) {
       <Badge className="absolute top-2 right-2 z-10">{data.level}</Badge>
       <Image src={thumbnailUrl} alt="Thumbnail Image of Course" width={600} height={400} className="w-full rounded-t-xl aspect-video h-full object-cover"/>
       <CardContent className="p-4">
-        <Link href={`/app/(admin)/courses/${data.slug}`} className="font-medium text-lg line-clamp-2 hover:underline group-hover:text-primary transition-colors">
+        <Link href={`/app/admin/courses/${data.slug}`} className="font-medium text-lg line-clamp-2 hover:underline group-hover:text-primary transition-colors">
         {data.title}
         </Link>
         <p className="line-clamp-2 text-sm text-muted-foreground leading-tight mt-2">{data.smallDescription}</p>
@@ -32,7 +32,7 @@ export function PublicCourseCard({data}: iAppProps) {
             <p className="text-sm text-muted-foreground">{data.category}h</p>
           </div>
         </div>
-        <Link href={`/app/(admin)/courses/${data.slug}`} className={buttonVariants({
+        <Link href={`/courses/${data.slug}`} className={buttonVariants({
           className: "w-full mt-4"
         })}>
           Learn More.

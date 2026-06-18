@@ -10,26 +10,30 @@ import { admin } from "better-auth/plugins"
 
 export const auth = betterAuth({
     database: prismaAdapter(prisma, {
-        provider: "sqlite", // or "mysql", "postgresql", ...etc
+        provider: "sqlite",
     }),
+
+
     emailAndPassword: {
         enabled: true
     },
+
     socialProviders: {
         github: {
             clientId: env.AUTH_GITHUB_CLIENT_ID,
             clientSecret: env.AUTH_GITHUB_CLIENT_SECRET,
         }
     },
+
     plugins: [
         emailOTP({
-            async sendVerificationOTP({email, otp}) {
+            async sendVerificationOTP({ email, otp }) {
                 await resend.emails.send({
-                from: 'Synapse <onboarding@resend.dev>',
-                to: [email],
-                subject: 'Synapse - Verify your email',
-                html: `<p>Your OTP is <strong>${otp}</strong></p>`
-            })
+                    from: "Synapse <onboarding@resend.dev>",
+                    to: [email],
+                    subject: "Synapse - Verify your email",
+                    html: `<p>Your OTP is <strong>${otp}</strong></p>`
+                });
             }
         }),
         admin()

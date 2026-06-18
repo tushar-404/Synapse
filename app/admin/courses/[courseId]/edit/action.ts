@@ -5,7 +5,7 @@ import arcjet, { detectBot, fixedWindow } from "@/lib/arcjet";
 import { prisma } from "@/lib/db";
 import { CourseLevel, CourseStatus } from "@/lib/generated/prisma/enums";
 import { ApiResponse } from "@/lib/type";
-import { chapterSchema, ChapterSchemaType, courseSchema, CourseSchemaType, lessonSchema } from "@/lib/zodSchema";
+import { chapterSchema, ChapterSchemaType, courseSchema, CourseSchemaType, lessonSchema, LessonSchemaType } from "@/lib/zodSchema";
 import { request } from "@arcjet/next";
 import { revalidatePath } from "next/cache";
 
@@ -173,6 +173,8 @@ export async function createChapter(values: ChapterSchemaType): Promise<ApiRespo
         const result = chapterSchema.safeParse(values)
 
         if(!result.success) {
+            console.log(result.error.flatten());
+
             return {
                 status: 'error',
                 message: "Invalid data"
@@ -216,7 +218,7 @@ export async function createChapter(values: ChapterSchemaType): Promise<ApiRespo
     }
 }
 
-export async function createLesson(values: ChapterSchemaType): Promise<ApiResponse> {
+export async function createLesson(values: LessonSchemaType): Promise<ApiResponse> {
 
     await requireAdmin()
     try {
